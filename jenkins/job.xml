@@ -1,0 +1,68 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<project>
+<actions/>
+<description>create new deployment in git </description>
+<keepDependencies>false</keepDependencies>
+<properties>
+<hudson.model.ParametersDefinitionProperty>
+<parameterDefinitions>
+<hudson.model.StringParameterDefinition>
+<name>domain</name>
+<defaultValue>jenkinz</defaultValue>
+<trim>true</trim>
+</hudson.model.StringParameterDefinition>
+<hudson.model.StringParameterDefinition>
+<name>product</name>
+<defaultValue>helloapp</defaultValue>
+<trim>true</trim>
+</hudson.model.StringParameterDefinition>
+</parameterDefinitions>
+</hudson.model.ParametersDefinitionProperty>
+</properties>
+<scm class="hudson.plugins.git.GitSCM" plugin="git@5.7.0">
+<configVersion>2</configVersion>
+<userRemoteConfigs>
+<hudson.plugins.git.UserRemoteConfig>
+<url>https://github.com/tmp120210/keptstore-deployments.git</url>
+<credentialsId>41bc0eb8-7c0e-4525-94ea-17f29b10ae76</credentialsId>
+</hudson.plugins.git.UserRemoteConfig>
+</userRemoteConfigs>
+<branches>
+<hudson.plugins.git.BranchSpec>
+<name>*/master</name>
+</hudson.plugins.git.BranchSpec>
+</branches>
+<doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+<submoduleCfg class="empty-list"/>
+<extensions/>
+</scm>
+<canRoam>true</canRoam>
+<disabled>false</disabled>
+<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+<authToken>0f93u12094ut240539d0f19345t09gf49394f4</authToken>
+<triggers/>
+<concurrentBuild>false</concurrentBuild>
+<builders>
+<hudson.tasks.Shell>
+<command>git config --global user.name "Jenkins CI" git config --global user.email "jenkins@sapsan17.ru" git checkout master echo $domain echo '${domain}' mkdir $domain touch $domain/config.json echo "{\"domain\":\"${domain}\", \"product\":\"${product}\"}" >> $domain/config.json git add . git commit -m "jenkins update"</command>
+<configuredLocalRules/>
+</hudson.tasks.Shell>
+</builders>
+<publishers>
+<hudson.plugins.git.GitPublisher plugin="git@5.7.0">
+<configVersion>2</configVersion>
+<pushMerge>false</pushMerge>
+<pushOnlyIfSuccess>true</pushOnlyIfSuccess>
+<forcePush>false</forcePush>
+<branchesToPush>
+<hudson.plugins.git.GitPublisher_-BranchToPush>
+<targetRepoName>origin</targetRepoName>
+<branchName>master</branchName>
+<rebaseBeforePush>false</rebaseBeforePush>
+</hudson.plugins.git.GitPublisher_-BranchToPush>
+</branchesToPush>
+</hudson.plugins.git.GitPublisher>
+</publishers>
+<buildWrappers/>
+</project>

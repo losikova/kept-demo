@@ -1,0 +1,47 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: appset
+  namespace: argocd
+  
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  # - list:
+  #     elements:
+  #     - domain: sapsan
+  #       product: helloapp
+  #     - domain: redrazr
+  #       product: helloapp
+    - git:
+        repoURL: https://github.com/tmp120210/keptstore-deployments.git
+        revision: master
+        files:
+        - path: "**/config.json"
+  template:
+    metadata:
+      name: '{{.product}}-{{.domain}}'
+    spec:
+      destination:
+        namespace: keptapp
+        server: https://kubernetes.default.svc
+      source:
+        path: .
+        repoURL: https://github.com/tmp120210/kepstore-app.git
+        targetRevision: HEAD
+        helm:
+          valuesObject:
+            ingress:
+              enabled: true
+              hosts:
+                - host:  '{{.product}}-{{.domain}}.test'
+                  paths:
+                  - path: /
+                    pathType: ImplementationSpecific
+      sources: []
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: false

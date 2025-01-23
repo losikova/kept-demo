@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app
+  namespace: argocd
+    
+spec:
+  destination:
+    namespace: keptapp
+    server: https://kubernetes.default.svc
+  source:
+    path: .
+    repoURL: https://github.com/tmp120210/kepstore-app.git
+    targetRevision: HEAD
+    helm:
+      valuesObject:
+        ingress:
+          enabled: true
+          hosts:
+            - host:  keptsppp.test
+              paths:
+              - path: /
+                pathType: ImplementationSpecific
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
